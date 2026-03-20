@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Special Engagement Invitation</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #333;
+    }
+
+    #invite-section, #message-section {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      text-align: center;
+      width: 320px;
+      transition: all 0.5s ease;
+    }
+
+    input {
+      padding: 10px;
+      width: 80%;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff69b4;
+      color: white;
+      cursor: pointer;
+      font-size: 1em;
+    }
+
+    button:hover {
+      background-color: #ff1493;
+    }
+
+    #message-section {
+      display: none;
+    }
+
+    img {
+      width: 100%;
+      border-radius: 15px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="invite-section">
+    <h2>Enter your name</h2>
+    <input type="text" id="nameInput" placeholder="Your name">
+    <br>
+    <button onclick="showInvitation()">Enter</button>
+  </div>
+
+  <div id="message-section">
+    <h2 id="invitationMessage"></h2>
+    <p>You are warmly invited to our special event 💖</p>
+      </div>
+
+  <script>
+    async function showInvitation() {
+      const name = document.getElementById("nameInput").value.trim();
+      if (name === "") {
+        alert("Please enter your name!");
+        return;
+      }
+
+      document.getElementById("invite-section").style.display = "none";
+      document.getElementById("message-section").style.display = "block";
+      const msg = document.getElementById("invitationMessage");
+      msg.innerHTML = `My Dear, ${name}!`;
+
+      // 💖 Add the couple image
+      const img = document.createElement("img");
+      img.src = "Invitation image.png"; // keep image in /images folder
+      img.alt = "Couple Photo";
+      msg.appendChild(img);
+
+      // 💾 Save name + time to Google Sheet
+      try {
+        await fetch("https://script.google.com/macros/s/AKfycbxFg9eGwCUrVapeXmONhA-pwLSMs94N-E2SgqJ87DVKcLxL1OnaBONzL1WrGNGPtSKZ/exec", {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name })
+        });
+        console.log("Name saved successfully!");
+      } catch (error) {
+        console.error("Error saving name:", error);
+      }
+    }
+  </script>
+
+</body>
+</html>
